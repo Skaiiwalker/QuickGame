@@ -1,49 +1,68 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace QuickGame
+
+namespace Shooter
 {
-	public class Player
-	{
-		public Texture2D PlayerTexture;
-		public Vector2 Position;
-		public bool Active;
-		public int Health;
+    class Player
+    {
+        // Animation representing the player
+        public Animation PlayerAnimation;
 
-		public int Width
-		{
-			get 
-			{
-				return PlayerTexture.Width;
-			}
+        // Position of the Player relative to the upper left side of the screen
+        public Vector2 Position;
 
-		}
+        // State of the player
+        public bool Active;
 
-		public int Height
-		{
-			get 
-			{
-				return PlayerTexture.Height;
-			}
-		}
+        // Amount of hit points that player has
+        public int Health;
 
-		public void Initialize(Texture2D texture, Vector2 position)
-		{
-			PlayerTexture = texture;
-			Position = position;
-			Active = true;
-			Health = 100;
-		}
+        // Get the width of the player ship
+        public int Width
+        {
+            get { return PlayerAnimation.FrameWidth; }
+        }
 
-		public void Update()
-		{
+        // Get the height of the player ship
+        public int Height
+        {
+            get { return PlayerAnimation.FrameHeight; }
+        }
 
-		}
 
-		public void Draw(SpriteBatch spriteBatch)
-		{
-			spriteBatch.Draw (PlayerTexture, Position, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-		}
-	}
+        // Initialize the player
+        public void Initialize(Animation animation, Vector2 position)
+        {
+            PlayerAnimation = animation;
+
+
+            // Set the starting position of the player around the middle of the screen and to the back
+            Position = position;
+
+
+            // Set the player to be active
+            Active = true;
+
+
+            // Set the player health
+            Health = 100;
+        }
+
+
+        // Update the player animation
+        public void Update(GameTime gameTime)
+        {
+            PlayerAnimation.Position = Position;
+            PlayerAnimation.Update(gameTime);
+        }
+
+        // Draw the player
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            PlayerAnimation.Draw(spriteBatch);
+        }
+
+    }
 }
