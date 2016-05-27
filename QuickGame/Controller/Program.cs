@@ -13,7 +13,7 @@ using UIKit;
 #endif
 #endregion
 
-namespace QuickGame
+namespace QuickGame.Controller
 {
 	#if __IOS__ || __TVOS__
     [Register("AppDelegate")]
@@ -23,11 +23,11 @@ namespace QuickGame
 	static class Program
     #endif
     {
-		private static Game1 game;
+		private static QuickGame game;
 
 		internal static void RunGame ()
 		{
-			game = new Game1 ();
+			game = new QuickGame ();
 			game.Run ();
 			#if !__IOS__  && !__TVOS__
 			game.Dispose ();
