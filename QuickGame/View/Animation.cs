@@ -26,7 +26,7 @@ namespace QuickGame
 		public bool Looping;
 		public Vector2 Position;
 
-		public void Initializate(Texture2D myTexture, Vector2 myPosition, int myFrameWidth, int myFrameHeight, int myFrameCount, int myFrameTime, Color myColor, float myScale, bool isLooping)
+		public void Initialize(Texture2D myTexture, Vector2 myPosition, int myFrameWidth, int myFrameHeight, int myFrameCount, int myFrameTime, Color myColor, float myScale, bool isLooping)
 		{
 			this.color = myColor;
 			this.FrameWidth = myFrameWidth;
