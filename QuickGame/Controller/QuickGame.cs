@@ -41,6 +41,9 @@ namespace QuickGame.Controller
 		TimeSpan fireTime;
 		TimeSpan previousFireTime;
 
+		Texture2D explosionTexture;
+		List<Animation> explosions;
+
 		public QuickGame ()
 		{
 			graphics = new GraphicsDeviceManager (this);
@@ -64,6 +67,8 @@ namespace QuickGame.Controller
 			projectiles = new List<Projectile> ();
 			fireTime = TimeSpan.FromSeconds (.15f);
 
+			explosions = new List<Animation> ();
+
 			base.Initialize ();
 		}
 			
@@ -83,6 +88,7 @@ namespace QuickGame.Controller
 
 			enemyTexture = Content.Load<Texture2D> ("Animation/mineAnimation");
 			projectileTexture = Content.Load<Texture2D> ("Texture/laser");
+			explosionTexture = Content.Load<Texture2D> ("Animation/explosion");
 
 			mainBackground = Content.Load<Texture2D> ("Texture/mainbackground");
 		}
@@ -106,8 +112,11 @@ namespace QuickGame.Controller
 			bgLayer2.Update ();
 
 			UpdateEnemies (gameTime);
+
 			UpdateCollision ();
 			UpdateProjectiles ();
+
+			UpdateExplosions(gameTime);
 
 			base.Update (gameTime);
 		}
@@ -130,6 +139,11 @@ namespace QuickGame.Controller
 			for(int i = 0; i < projectiles.Count; i++)
 			{
 				projectiles [i].Draw (spriteBatch);
+			}
+
+			for(int i = 0; i < explosions.Count; i++)
+			{
+				explosions [i].Draw (spriteBatch);
 			}
 
 			player.Draw (spriteBatch);
@@ -194,6 +208,13 @@ namespace QuickGame.Controller
 			projectiles.Add (projectile);
 		}
 
+		private void AddExplosion(Vector2 position)
+		{
+			Animation explosion = new Animation ();
+			explosion.Initialize (explosionTexture, position, 134, 134, 12, 45, Color.White, 1f, false);
+			explosions.Add(explosion);
+		}
+
 		private void UpdateEnemies(GameTime gameTime)
 		{
 			if(gameTime.TotalGameTime - previousSpawnTime > enemySpawnTime)
@@ -207,6 +228,7 @@ namespace QuickGame.Controller
 
 				if(enemies[i].active == false)
 				{
+					AddExplosion(enemies[i].position);
 					enemies.RemoveAt (i);
 				}
 			}
@@ -259,6 +281,18 @@ namespace QuickGame.Controller
 						enemies [j].health -= projectiles [i].damage;
 						projectiles [i].active = false;
 					}
+				}
+			}
+		}
+
+		private void UpdateExplosions(GameTime gameTime)
+		{
+			for(int i = explosions.Count - 1; i >= 0; i--)
+			{
+				explosions [i].Update (gameTime);
+				if(explosions[i].Active == false)
+				{
+					explosions.RemoveAt (i);
 				}
 			}
 		}
