@@ -29,6 +29,34 @@ namespace QuickGame
 			
 		}
 
+		public void Initialize(Animation myAnimation, Vector2 myPosition)
+		{
+			enemyAnimation = myAnimation;
+			position = myPosition;
+			active = true;
+			health = 10;
+			damage = 10;
+			enemyMoveSpeed = 6f;
+			value = 100;
+		}
+
+		public void Update(GameTime gameTime)
+		{
+			position.X -= enemyMoveSpeed;
+			enemyAnimation.Position = position;
+			enemyAnimation.Update (gameTime);
+
+			if(position.X < -width || health <= 0)
+			{
+				active = false;
+			}
+		}
+
+		public void Draw(SpriteBatch spriteBatch)
+		{
+			enemyAnimation.Draw (spriteBatch);
+		}
+
 
 
 

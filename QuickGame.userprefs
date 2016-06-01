@@ -1,10 +1,12 @@
 ﻿<Properties StartupItem="QuickGame/QuickGame.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="QuickGame/Model/player.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="QuickGame/Model/Enemy.cs">
     <Files>
-      <File FileName="QuickGame/Model/player.cs" Line="11" Column="7" />
-      <File FileName="../../../Downloads/Shooter_Complete_Windows/Shooter/Shooter/Shooter/Player.cs" Line="8" Column="24" />
-      <File FileName="QuickGame/View/Animation.cs" Line="31" Column="4" />
+      <File FileName="QuickGame/Model/player.cs" Line="42" Column="38" />
+      <File FileName="QuickGame/View/Animation.cs" Line="29" Column="25" />
+      <File FileName="QuickGame/Controller/QuickGame.cs" Line="123" Column="49" />
+      <File FileName="QuickGame/View/ParallaxingBackground.cs" Line="27" Column="45" />
+      <File FileName="QuickGame/Model/Enemy.cs" Line="26" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
