@@ -96,6 +96,7 @@ namespace QuickGame.Controller
 			bgLayer2.Update ();
 
 			UpdateEnemies (gameTime);
+			UpdateCollision ();
 
 			base.Update (gameTime);
 		}
@@ -182,6 +183,28 @@ namespace QuickGame.Controller
 			}
 		}
 
+		private void UpdateCollision()
+		{
+			Rectangle rectangle1;
+			Rectangle rectangle2;
+
+			rectangle1 = new Rectangle ((int)player.Position.X, (int)player.Position.Y, player.Width, player.Height);
+
+			for(int i = 0; i < enemies.Count; i++)
+			{
+				rectangle2 = new Rectangle ((int)enemies [i].position.X, (int)enemies [i].position.Y, enemies [i].width, enemies [i].height);
+
+				if(rectangle1.Intersects(rectangle2))
+				{
+					player.Health -= enemies [i].damage;
+
+					enemies [i].health = 0;
+
+					if (player.Health <= 0)
+						player.Active = false;
+				}
+			}
+		}
 	}
 }
 
