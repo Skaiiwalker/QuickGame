@@ -27,7 +27,9 @@ namespace QuickGame.Controller
 		ParallaxingBackground bgLayer1;
 		ParallaxingBackground bgLayer2;
 
-		Texture2D enemyTexture;
+		Texture2D enemyTexture1;
+		Texture2D enemyTexture2;
+		Texture2D enemyTexture3;
 		List<Enemy> enemies;
 
 		TimeSpan enemySpawnTime;
@@ -43,6 +45,9 @@ namespace QuickGame.Controller
 
 		Texture2D explosionTexture;
 		List<Animation> explosions;
+
+		int score;
+		SpriteFont font;
 
 		public QuickGame ()
 		{
@@ -86,7 +91,11 @@ namespace QuickGame.Controller
 			bgLayer1.Initialize (Content, "Texture/bgLayer1", GraphicsDevice.Viewport.Width, -1);
 			bgLayer2.Initialize (Content, "Texture/bgLayer2", GraphicsDevice.Viewport.Width, -2);
 
-			enemyTexture = Content.Load<Texture2D> ("Animation/mineAnimation");
+
+			enemyTexture1 = Content.Load<Texture2D> ("Animation/mineAnimation");
+			enemyTexture2 = Content.Load<Texture2D> ("Texture/penguin");
+			enemyTexture3 = Content.Load<Texture2D> ("Texture/luigi");
+
 			projectileTexture = Content.Load<Texture2D> ("Texture/laser");
 			explosionTexture = Content.Load<Texture2D> ("Animation/explosion");
 
@@ -191,13 +200,27 @@ namespace QuickGame.Controller
 
 		private void AddEnemy()
 		{
-			Animation enemyAnimation = new Animation ();
-			enemyAnimation.Initialize (enemyTexture, Vector2.Zero, 47, 61, 8, 30, Color.White, 1f, true);
-
-			Vector2 position = new Vector2 (GraphicsDevice.Viewport.Width + enemyTexture.Width / 2, random.Next (100, GraphicsDevice.Viewport.Height - 100));
-
 			Enemy enemy = new Enemy ();
-			enemy.Initialize (enemyAnimation, position);
+
+			Texture2D texture = enemyTexture1;
+			Vector2 position = new Vector2 (GraphicsDevice.Viewport.Width + texture.Width / 2, random.Next (100, GraphicsDevice.Viewport.Height - 100));
+			int r = random.Next (1, 4);
+			if(r == 1)
+			{
+				texture = enemyTexture2;
+				enemy.StaticInitialize (texture, position);
+			}
+			else if(r == 2)
+			{
+				texture = enemyTexture3;
+				enemy.StaticInitialize (texture, position);
+			}
+			else if(r == 3)
+			{
+				Animation enemyAnimation = new Animation ();
+				enemyAnimation.Initialize (texture, Vector2.Zero, 47, 61, 8, 30, Color.White, 1f, true);
+				enemy.Initialize (enemyAnimation, position);
+			}
 			enemies.Add (enemy);
 		}
 
