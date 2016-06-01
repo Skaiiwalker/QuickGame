@@ -82,11 +82,11 @@ namespace QuickGame.Controller
 			spriteBatch = new SpriteBatch (GraphicsDevice);
 
 			Animation playerAnimation = new Animation ();
-			Texture2D playerTexture = Content.Load<Texture2D> ("Animation/explosion");
-			playerAnimation.Initialize (playerTexture, Vector2.Zero, 115, 69, 8, 30, Color.White, 1f, true);
+			Texture2D playerTexture = Content.Load<Texture2D> ("Texture/smiley");
+//			playerAnimation.Initialize (playerTexture, Vector2.Zero, 115, 69, 8, 30, Color.White, 1f, true);
 
 			Vector2 playerPosition = new Vector2 (GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
-			player.Initialize (playerAnimation, playerPosition);
+			player.Initialize (playerTexture, playerPosition);
 
 			bgLayer1.Initialize (Content, "Texture/bgLayer1", GraphicsDevice.Viewport.Width, -1);
 			bgLayer2.Initialize (Content, "Texture/bgLayer2", GraphicsDevice.Viewport.Width, -2);
@@ -163,7 +163,7 @@ namespace QuickGame.Controller
 
 		private void UpdatePlayer(GameTime gameTime)
 		{
-			player.Update (gameTime);
+			player.Update ();
 
 			player.Position.X += currentGamePadState.ThumbSticks.Left.X * playerMoveSpeed;
 			player.Position.Y -= currentGamePadState.ThumbSticks.Left.Y * playerMoveSpeed;

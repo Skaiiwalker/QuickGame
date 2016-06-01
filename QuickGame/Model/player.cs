@@ -7,6 +7,7 @@ namespace QuickGame
 	public class Player
 	{
 		public Animation PlayerAnimation;
+		public Texture2D playerTexture;
 		public Vector2 Position;
 		public bool Active;
 		public int Health;
@@ -15,7 +16,7 @@ namespace QuickGame
 		{
 			get 
 			{
-				return PlayerAnimation.FrameWidth;
+				return playerTexture.Width;
 			}
 
 		}
@@ -24,27 +25,28 @@ namespace QuickGame
 		{
 			get 
 			{
-				return PlayerAnimation.FrameHeight;
+				return playerTexture.Height;
 			}
 		}
 
-		public void Initialize(Animation animation, Vector2 position)
+		float playerSpeed;
+
+		public void Initialize(Texture2D texture, Vector2 position)
 		{
-			PlayerAnimation = animation;
+			playerTexture = texture;
 			Position = position;
 			Active = true;
 			Health = 100;
 		}
 
-		public void Update(GameTime gameTime)
+		public void Update()
 		{
-			PlayerAnimation.Position = Position;
-			PlayerAnimation.Update (gameTime);
+
 		}
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
-			PlayerAnimation.Draw (spriteBatch);
+			spriteBatch.Draw (playerTexture, Position, null, Color.White, 0f, new Vector2 (Width / 2, Height / 2), 1f, SpriteEffects.None, 0f);
 		}
 	}
 }
