@@ -35,6 +35,12 @@ namespace QuickGame.Controller
 
 		Random random;
 
+		Texture2D projectileTexture;
+		List<Projectile> projectiles;
+
+		TimeSpan fireTime;
+		TimeSpan previousFireTime;
+
 		public QuickGame ()
 		{
 			graphics = new GraphicsDeviceManager (this);
@@ -55,6 +61,9 @@ namespace QuickGame.Controller
 			enemySpawnTime = TimeSpan.FromSeconds (1.0f);
 			random = new Random ();
 
+			projectiles = new List<Projectile> ();
+			fireTime = TimeSpan.FromSeconds (.15f);
+
 			base.Initialize ();
 		}
 			
@@ -73,6 +82,7 @@ namespace QuickGame.Controller
 			bgLayer2.Initialize (Content, "Texture/bgLayer2", GraphicsDevice.Viewport.Width, -2);
 
 			enemyTexture = Content.Load<Texture2D> ("Animation/mineAnimation");
+			projectileTexture = Content.Load<Texture2D> ("Texture/laser");
 
 			mainBackground = Content.Load<Texture2D> ("Texture/mainbackground");
 		}
@@ -97,6 +107,7 @@ namespace QuickGame.Controller
 
 			UpdateEnemies (gameTime);
 			UpdateCollision ();
+			UpdateProjectiles ();
 
 			base.Update (gameTime);
 		}
@@ -114,6 +125,11 @@ namespace QuickGame.Controller
 			for(int i = 0; i < enemies.Count; i++)
 			{
 				enemies [i].Draw (spriteBatch);
+			}
+
+			for(int i = 0; i < projectiles.Count; i++)
+			{
+				projectiles [i].Draw (spriteBatch);
 			}
 
 			player.Draw (spriteBatch);
@@ -151,6 +167,12 @@ namespace QuickGame.Controller
 
 			player.Position.X = MathHelper.Clamp (player.Position.X, 0, GraphicsDevice.Viewport.Width - player.Width);
 			player.Position.Y = MathHelper.Clamp (player.Position.Y, 0, GraphicsDevice.Viewport.Height - player.Height);
+
+			if(gameTime.TotalGameTime - previousFireTime > fireTime)
+			{
+				previousFireTime = gameTime.TotalGameTime;
+				AddProjectile (player.Position + new Vector2 (player.Width / 2, 0));
+			}
 		}
 
 		private void AddEnemy()
@@ -163,6 +185,13 @@ namespace QuickGame.Controller
 			Enemy enemy = new Enemy ();
 			enemy.Initialize (enemyAnimation, position);
 			enemies.Add (enemy);
+		}
+
+		private void AddProjectile(Vector2 myPosition)
+		{
+			Projectile projectile = new Projectile ();
+			projectile.Initialize (GraphicsDevice.Viewport, projectileTexture, myPosition);
+			projectiles.Add (projectile);
 		}
 
 		private void UpdateEnemies(GameTime gameTime)
@@ -179,6 +208,19 @@ namespace QuickGame.Controller
 				if(enemies[i].active == false)
 				{
 					enemies.RemoveAt (i);
+				}
+			}
+		}
+
+		private void UpdateProjectiles()
+		{
+			for(int i = projectiles.Count - 1; i >=0; i--)
+			{
+				projectiles [i].Update ();
+
+				if(projectiles[i].active == false)
+				{
+					projectiles.RemoveAt (i);
 				}
 			}
 		}
@@ -202,6 +244,21 @@ namespace QuickGame.Controller
 
 					if (player.Health <= 0)
 						player.Active = false;
+				}
+			}
+
+			for(int i = 0; i < projectiles.Count; i++)
+			{
+				for(int j = 0; j < enemies.Count; j++)
+				{
+					rectangle1 = new Rectangle ((int)projectiles [i].position.X - projectiles [i].width / 2, (int)projectiles [i].position.Y - projectiles [i].height / 2, projectiles [i].width, projectiles [i].height);
+					rectangle2 = new Rectangle ((int)enemies [j].position.X - enemies [j].width / 2, (int)enemies [j].position.Y - enemies [j].height / 2, enemies [j].width, enemies [j].height);
+
+					if(rectangle1.Intersects(rectangle2))
+					{
+						enemies [j].health -= projectiles [i].damage;
+						projectiles [i].active = false;
+					}
 				}
 			}
 		}
